@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>arguments 参数</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //声明一个函数，具有3个形参
+      function whatever(a,b,c){
+        //值的准确性校验
+           assert(a===1,'the value of a is 1');
+           assert(b===2,'the value of b is 2');
+           assert(c===3,'the value of c is 3');
+
+           //共传入5个实参
+           assert(arguments.length===5,'we have passed in 5 parameters');
+         
+           //验证传入的3个实参与函数的3个形参匹配
+           assert(arguments[0]===a,'the first argument is assgned to a');
+           assert(arguments[1]===b,'the second argument is assgned to b');
+           assert(arguments[2]===c,'the third argument is assgned to c');
+
+
+           //验证额外的参数可以通过参数arguments获取
+           assert(arguments[3]===4,'we can access the fourth argument');
+           assert(arguments[4]===5,'we can access the fifth argument');
+
+      }
+
+      //虽然只定义了3个形参， 调用时传入了5个参数
+      whatever(1,2,3,4,5)
+
+    </script>
+  </body>
+</html>

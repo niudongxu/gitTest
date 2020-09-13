@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>返回原始值的构造函数</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      function Ninja(){
+         this.skulk=function(){
+           return true;
+         }
+         //构造函数返回一个确定的原始值，即数字1
+         return 1;
+      }
+
+      //该函数以函数的形式被调用，正如预期， 其返回值数字为1
+      assert(Ninja()===1,'return value honored when not called as a constructor');
+      
+      //该函数通过new关键字以构造函数的形式被调用
+      var ninja=new Ninja();
+
+      //测试表明，返回值1被忽略了，一个新的被初始化的对象被通过关键字new所返回
+      assert(typeof ninja==='object','object return when called as a constructor');
+      assert(typeof ninja.skulk=='function','ninja object has a method');
+
+      
+
+    </script>
+  </body>
+</html>

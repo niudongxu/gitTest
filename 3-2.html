@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>存储唯一函数集合</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+
+      var store={
+        //跟踪下一个要被赋值的id
+        nextId:1,
+        //使用一个对象作为缓存，我们可以在其中存储函数
+        cache:{},
+        //仅当函数唯一时，将该函数加入缓存
+        add:function(fn){
+          if(!fn.id){
+            fn.id=this.nextId++;
+            this.cache[fn.id]=fn;
+            return true;
+          }
+        }
+      };
+      
+      //测试上面的代码按预期工作
+      function ninja(){}
+     assert(store.add(ninja),'Function was safely added.');
+     assert(!store.add(ninja),'But it was only added once.'); 
+
+      
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>简单回调函数的例子</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+
+
+      var text = "domo arigato!";
+      report("before defining functions");
+
+      //函数定义，参数为一个回调函数， 其函数体内会立即调用该回调函数
+      function useless(ninjaCallback) {
+        report("in useless function");
+        return ninjaCallback();
+      }
+
+      //简单的函数定义，仅返回一个全局变量
+      function getText() {
+        report("in getText function");
+        return text;
+      }
+
+      report("before making all the calls");
+
+      assert(useless(getText) == text, "the useless function works! " + text);
+
+      report("After the calls have been made");
+    </script>
+  </body>
+</html>

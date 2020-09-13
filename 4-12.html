@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>实现foreach迭代方法展示如何设置函数上下文</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+      
+
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      function foreach(list,callback){
+        //foreach函数接收两个参数，需要遍历的集合和回调函数
+        for(var n=0; n<list.length;n++){
+          //当前遍历到的元素作为函数上下文调用回调函数
+          callback.call(list[n],n);
+        }
+      }
+
+      //测试数组
+      var weapons=[{type:'shuriken'},{type:'katana'},{type:'nunchucks'}];
+
+      //调用迭代函数foreach， 确保每个回调函数的上下文正确
+      foreach(weapons,function(index){
+         assert(this===weapons[index],'got the expected value of '+weapons[index].type);
+      });
+
+     
+
+    </script>
+  </body>
+</html>

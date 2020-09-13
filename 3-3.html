@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算先前得到的值--自记忆函数</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      function isPrime(value){
+        //创建缓存
+        if(!isPrime.answers){
+          isPrime.answers={};
+        }
+
+        //检查缓存的值
+        if(isPrime.answers[value]!==undefined){
+          return isPrime.answers[value];
+        }
+
+        var prime=value !==0 && value !==1;//1 is not a prime
+        for (let i = 0; i < value; i++) {
+            if(value % i===0){
+              prime=false;
+              break;
+            }
+        }
+
+        //存储计算的值
+        return isPrime.answers[value]=prime;
+
+      }
+
+      //测试该函数是否正常工作
+      assert(isPrime(5),"5 is prime!");
+      assert(isPrime.answers=[5],'the answer was cached!')
+
+      
+
+    </script>
+  </body>
+</html>

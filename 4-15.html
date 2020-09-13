@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用bind方法</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+      
+      <button id="test">Click Me!</button>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      var button={
+        clicked:false,
+        click:function(){
+          this.clicked=true;
+          assert(button.clicked,'The button has been clicked');
+        }
+      };
+
+      var elem=document.getElementById("test");
+      //使用bind函数创建新函数，绑定到button上
+      elem.addEventListener("click",button.click.bind(button));
+
+
+      var boundFunction=button.click.bind(button);
+      assert(boundFunction!=button.click,'Calling bing creates a completly new function');
+
+     //所有函数均可访问bind方法，可创建并返回一个新的函数，并绑定在传入的对象上， 本例子中绑定了button对象上。
+     //不管如何调用该函数，this均被设置为对象本身。
+     //被绑定的函数与原始函数行为一致，函数题一致/
+     //调用bind方法不会修改原始函数，而是创建了一个全新的函数。
+
+    </script>
+  </body>
+</html>

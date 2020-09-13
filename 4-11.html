@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用apply 和 call 方法来设置函数上下文</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+      
+
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      //若想使用apply方法调用函数，需要为其传递两个参数：作为函数上下文的对象和一个数组作为函数调用的参数
+      //call使用方式类似， 不同点在于是直接以参数列表的形式，而不再是作为数组传递。
+
+
+
+      //函数‘处理’了参数，并将结果result变量放在任意一个作为该函数上下文的对象上
+      function juggle(){
+         var result=0;
+         for (let n = 0; n < arguments.length; n++) {
+           result +=arguments[n];
+         }
+         this.result=result;
+      }
+
+      //这些对象初始值为空，它们会作为测试对象
+      var ninja1={};
+      var ninja2={};
+
+     //使用apply方法向ninja1传递一个参数数组
+     juggle.apply(ninja1,[1,2,3,4]);
+     //使用call方法向ninja2传递一个参数列表
+     juggle.call(ninja2,5,6,7,8)
+
+     assert(ninja1.result===10,'juggled via apply');
+     assert(ninja2.result===26,'juggled via call');
+
+     
+
+    </script>
+  </body>
+</html>

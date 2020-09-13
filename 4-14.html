@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用箭头函数与对象字面量</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+      
+      <button id="test">Click Me!</button>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //全局代码中this指向全局window对象
+      assert(this===window,"this===window")
+      //使用对象字面量定义button
+      var button={
+        clicked:false,
+        //箭头函数是对象字面量的属性
+        click:()=>{
+          this.clicked=true;
+          //验证是否单击按钮
+          assert(button.clicked,'The button has been clicked');
+          //箭头函数中的this指向全局window对象
+          assert(this===window,'In arrow function this===window');
+          //clicked属性存储在window对象上
+          assert(window.clicked,'clicked is stored in window');
+
+        }
+      }
+
+      var elem =document.getElementById('test');
+      elem.addEventListener('click',button.click);
+      
+
+      // 箭头函数在创建时确定了this指向。 由于click箭头函数是作为对象字面量的属性定义的，对象字面量在全局代码中定义，因此，箭头函数内部this值与全局代码的this值相同
+      // 可以看出全局代码的this指向全局window对象。因此，clicked属性被定义在全局window对象上。
+
+
+     
+
+    </script>
+  </body>
+</html>

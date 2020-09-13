@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>显式返回对象值的构造函数</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      //创建一个全局对象，该对象的rules属性设置为false
+      var puppet={
+        rules:false
+      };
+
+      //尽管初始化了传入的this对象，返回该全局对象
+      function Emperor(){
+        this.rules=true;
+        return puppet;
+      }
+
+      //作为构造函数调用该函数
+      var emperor=new Emperor();
+
+      
+      //测试表明，变量emperor的值为构造函数返回的对象，而不是new表达式所返回的对象
+      assert(emperor==puppet,'the emperor is merely a puppet!');
+      assert(emperor.rules==false,'the puppet does not know how to rule!')
+
+
+      //如果构造函数返回一个对象，则该对象将作为整个表达式的值返回，而传入构造函数的this将被丢弃
+      //但是，如果构造函数返回的值是非对象类型，则忽略返回值，返回新创建的对象。
+
+      //因为构造函数通常以不同于普通函数的方式编码和使用，并且只有作为构造函数调用时才有意义，
+      //因此 出现了命名的约定来区分 构造函数 和 普通函数 及方法
+
+      //函数和方法的命名通常以描述其行为（skulk、creep、sneak、doSomethingWonderful等）的动词开头，且第一个是小写字母
+      //而构造函数则通常以描述所构造对象的名词命名，并且以大写字母开头：Ninja、Samurai、Emperor、Ronin等。
+
+      //显然，通过构造函数我们可以更优雅地创建多个遵循相同模式的对象，而无需一次次重复相同的代码。
+      //通用代码只需作为构造函数的主题写一次即可。
+
+    </script>
+  </body>
+</html>
