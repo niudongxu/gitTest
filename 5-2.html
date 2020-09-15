@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>另一个闭包例子</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //闭包允许函数访问并操作函数外部的变量。只要变量或函数存在于声明函数时的作用域内，闭包即可使函数能够访问这些变量或参数。
+
+      //有时作用域指的是在程序的特定部分中标识符的可见性，作用域是程序的一部分，特定名字绑定特定变量。
+
+      //闭包是javaScript的显著特征，是纯函数式编程语言的特性之一
+
+
+      //在全局作用域中定义一个变量
+      var outerValue="samurai";
+      var later;
+      function outerFunction(){
+        //在函数内部声明一个值，该值在作用域局限于函数内部，在函数外部不允许访问。 
+        var innerValue="ninja";
+
+        //在全局作用域中声明函数
+        function innerFunction(){
+          //在outerFunction函数中声明一个内部函数，声明该内部函数时，innerValue是在内部函数的作用域内
+          assert(outerValue==='samurai','I can see the samurai.');
+          assert(innerValue==="ninja",'I can see the ninja.')
+        }
+        //将内部函数innerFunction的引用存储在变量later上，因为later在全局作用域内，所以我们可以对它进行调用。
+        later=innerFunction;
+      }
+      //调用outerFunction函数，创建内部函数innerFunction,并将内部函数赋值给变量later
+      outerFunction();
+      //通过later调用内部函数。我们不能直接调用内部函数，因为它的作用域（和innerValue一起） 被限制在外部函数 outerFunction之内。
+      later();
+
+      //当在外部函数中声明内部函数时，不仅定义了函数的声明，而且还创建了个一个闭包。
+      //该闭包不仅包含了函数的声明，还包含了在函数声明时该作用域中的所有变量。
+      //当最终执行内部函数时，尽管声明时的作用域已经消失了，但是通过闭包，仍然能够访问到原始作用域。
+
+
+      //正如保护气泡一样，只要内部函数一直存在，内部函数的闭包就一直保存着该函数的作用域中的变量。
+      //这就是闭包。闭包创建了被定义时的作用域内的变量和函数的安全气泡，因此函数获得了执行时所需的内容。 该气泡包含了函数和变量，只要函数存在，它就会存在。
+
+
+
+      //谨记，每一个通过闭包访问变量的函数都有一个作用域链，作用域链包含闭包的全部信息，这一点非常重要。
+
+      //虽然闭包是非常有用的，但不能过度使用。 使用闭包时，所有的信息都会存储在内存中，直到JavaScript引擎确保这些信息不再使用（可以安全地进行垃圾回收）或页面卸载时，才会清理这些信息。
+
+
+      
+
+
+    </script>
+  </body>
+</html>

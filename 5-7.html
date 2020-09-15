@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用关键字var</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    <div id="box">First Box</div>
+    <ul id="results"></ul>
+    <script>
+      //测试用言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //当使用关键字var 时， 该变量是在距离最近的函数内部或是在全局词法环境（作用域）中定义的
+
+
+      //使用关键字var定义全局变量
+      var gloablNinja="Yoshi";
+
+      function reportActivity(){
+        //使用关键字var 定义函数内部变量
+         var functionActivity="jumping";
+
+         //使用关键字var 在for循环中定义两个变量
+         for(var i=0;i<3;i++){
+           var forMessage=gloablNinja+" "+functionActivity;
+           assert(forMessage==='Yoshi jumping','Yoshi is jumping within the for block');
+           assert(i,'current loop counter:'+ i);
+         } 
+
+         //在for循环外部，仍然能够访问到for循环中定义的变量
+         assert(i===3 && forMessage==="Yoshi jumping", 'Loop variables accessible outside of the loop');
+         //即使在块级作用域内定义的变量，在块级作用域外仍然能够被访问
+         //这源于var声明的变量实际上总是在距离最近的 函数内 或 全局词法环境 中注册的，不关注块级作用域。
+
+         
+      }
+
+      reportActivity();
+      //函数外部无法访问到函数内部的局部变量
+      assert(typeof functionActivity ==='undefined' && typeof i==='undefined' && typeof forMessage==="undefined","we cannot see function variables outside of a function.")
+
+     
+     //这里有3中词法环境
+     //1. 变量globalNinja是在全局环境中定义的（距离最近的函数内 或 全局词法环境）
+     //2.reportActivity 函数创建的函数环境，包含变量 functionActivity、i、与 forMessage。这3个变量均通过关键字var定义的，与它们距离最近的是reportActivity函数。
+     //for循环的块级作用域，关键字var定义的变量忽略块级作用域
+      
+
+      
+
+    </script>
+  </body>
+</html>

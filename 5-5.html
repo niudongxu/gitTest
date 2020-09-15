@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>创建执行上下文</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    <div id="box">First Box</div>
+    <ul id="results"></ul>
+    <script>
+      //测试用言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //javascript 代码有两种类型：一种是全局代码，在所有函数外部定义；一种是函数代码，位于函数内部。
+      //javascript引擎执行代码时，每条语句都处于特定的执行上下文中
+
+      // 两种执行上下文
+      // 全局执行上下文和函数执行上下文
+      // 二者的重要差别就是：全局执行上下文只有一个，当JavaScript程序开始执行时就已经创建了全局上下文；而函数执行上下文是在每次调用函数时，就会创建一个新的。
+
+
+      //this是函数上下文，调用函数时可以通过关键字访问函数上下文
+      //与函数执行上下文是完全不一样的概念。
+
+
+
+      //javascript单线程执行模型：在某个特定的时刻只能执行特定的代码，一旦发生函数调用，当前的执行上下文必须停止执行，并创建新的函数执行上下文来执行函数。
+      //当函数执行完成后，将函数执行上下文销毁，并重新回到发生调用时的执行上下文中。最简单的跟踪方法是使用执行上下文栈，称之为调用栈
+
+      //栈是一种基本的数据结构，只能在栈的顶端对数据项进行插入和读取。
+
+
+      //一个函数调用另外一个函数
+      function skulk(ninja){
+        report(ninja+' skulking');
+      }
+
+      //通过内置的console.log方法发送消息
+      function report(params) {
+        console.log(params);
+      }
+
+      //在全局中分别调用两个函数
+      skulk("Kuma");
+      skulk('Yoshi');
+
+
+      
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>闭包</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //闭包允许函数访问并操作函数外部的变量。只要变量或函数存在于声明函数时的作用域内，闭包即可使函数能够访问这些变量或参数。
+
+      //有时作用域指的是在程序的特定部分中标识符的可见性，作用域是程序的一部分，特定名字绑定特定变量。
+
+      //闭包是javaScript的显著特征，是纯函数式编程语言的特性之一
+
+
+      //在全局作用域中定义一个变量
+      var outerValue="ninja";
+      function outerFunction(){
+        //在全局作用域中声明函数
+         assert(outerValue==='ninja','I can see the ninja.');
+      }
+      //执行该函数
+      outerFunction();
+
+      //函数可以‘看见’并访问变量outerValue。 其实正在创建一个闭包。
+
+    </script>
+  </body>
+</html>

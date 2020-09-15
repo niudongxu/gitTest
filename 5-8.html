@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用关键字let 与 const</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    <div id="box">First Box</div>
+    <ul id="results"></ul>
+    <script>
+      //测试用言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //使用const定义全局变量，全局静态变量通常大小写表示
+      const GLOBAL_NINJA ='Yoshi';
+
+      function reportActivity(){
+        const functionActivity="jumping"
+        
+        //使用let 在 for 循环中定义两个变量
+        for(let i=1; i<3; i++){
+          let forMessage=GLOBAL_NINJA+' '+functionActivity;
+          //在for循环中，我们毫无意外的可以访问块级变量 函数变量 和 全局变量
+          assert(forMessage==='Yoshi jumping','Yoshi is jumping within the for block');
+          assert(i,'current loop counter:'+i);
+        }
+
+        //在for循环外部 无法访问for循环内的变量
+        assert(typeof i==="undefined" && typeof forMessage=="undefined","loop variables not accessible outside the loop")
+      }
+
+
+      reportActivity();
+      //自然地，在函数外部无法访问任何一个函数内部的变量
+      assert(typeof functionActivity==="undefined" && typeof i==="undefined" && typeof forMessage==="undefined",'we cannot see function variables outside of a function')
+
+
+
+     
+      
+      
+
+    </script>
+  </body>
+</html>

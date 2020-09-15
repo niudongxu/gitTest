@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>回调函数--处理回调函数是常见使用闭包的情景，在interval的回调函数中使用闭包</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+        #box{position:fixed;}
+    </style>
+  </head>
+  <body>
+    <div id="box">First Box</div>
+    <ul id="results"></ul>
+    <script>
+      //测试用言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+//回调函数指的是需要在将来不确定的某个时刻异步调取的函数。 通常，在这种回调函数中，我们经常需要频繁的访问外部数据。
+      function animateIt(elementId) {
+       //在动画函数内部，获取dom元素的引用
+        var elem=document.getElementById(elementId);
+        //创建一个计时器用于记录动画执行的次数
+        var tick=0;
+        //创建并启动一个JavaScript内置的计时器，传入一个回调函数
+        var timer=setInterval(function () {
+          //每隔10毫秒调用一次计时器回调函数，调整元素的位置100次
+          if(tick<100){
+            elem.style.left=elem.style.top=tick+'px';
+            tick++;
+          }else{
+            clearInterval(timer);
+            //执行了100次之后，停止计时器，并验证我们还可以看到与执行动画有关的变量。
+            assert(tick===100,'Tick also accessed via a closure.');
+            assert(elem,'Element also accessed via a closure.');
+            assert(timer,'Timer reference also obtained via a closure.');
+
+          }
+        },10)
+        //setInterval 函数的持续时间为10毫秒，也就是说 回调函数10毫秒调用一次
+        
+      }
+
+      //全部设置完成之后，我们可以执行动画函数并查看效果。
+      animateIt("box");
+
+      //如果没有闭包，一次性同时做很多事情，例如事件绑定，动画甚至服务端请求等，都将会变得非常困难。
+      //闭包内的函数不仅可以在闭包创建的时刻访问这些变量，而且当闭包内部的函数执行时，还可以更新这些变量的值。
+      //闭包不是在创建的那一时刻状态的快照，而是一个真实的封装状态，只要闭包存在，就可以对变量进行修改。
+
+      
+
+    </script>
+  </body>
+</html>
