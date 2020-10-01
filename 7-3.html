@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>观察初始化过程的优先级</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //把函数作为构造函数，通过操作符new进行调用时，它的上下文被定义为新的对象实例
+      //通过原型暴露属性，通过构造函数的参数进行初始化
+
+
+      function Ninja(){
+        //创建布尔类型的实例变量，并初始化该变量的默认值为false
+        this.swung=false;
+        //创建实例方法，该方法的返回值为实例变量swung取反
+        this.swingSword=function(){
+          return !this.swung;
+        };
+      }
+
+      //定义一个与实例方法同名的原型方法，将会优先使用哪一个呢
+      Ninja.prototype.swingSword=function(){
+        return this.swung;
+      }
+
+      //创建Ninja的一个实例，并验证实例方法会重写与之同名的原型方法。
+      const ninja=new Ninja();
+      assert(ninja.swingSword(),"called the instance method, not the prototype method.");
+      
+       //实例会隐藏原型中与实例方法重名的方法。
+
+       //在构造函数内部，关键字this指向新创建的对象，所以在构造器内添加的属性直接在新的ninja实例上。然后，当通过ninja访问SwingSword属性时，就不需要遍历原型链，就立即可以找到并返回了在构造器内创建的属性。
+
+
+
+
+       //只在函数的原型上创建对象方法是很有意义的，这样我们可以使得同一个方法由所有对象实例共享
+       //闭包得知：在构造函数内部定义方法，使得我们可以模仿私有对象变量。如果我们需要私有对象，在构造函数内指定方法是唯一的解决方案。
+
+
+
+
+
+    </script>
+  </body>
+</html>

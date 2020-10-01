@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>仔细研究promise的执行顺序</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      report("At code start");
+      var ninjaDelayedPromise=new Promise((resolve,reject)=>{
+        //调用Promise 构造函数来立即调用传入的函数
+        report("ninjaDelayedPromise executor");
+        //在500ms之后，为promise调用resolve方法表明承诺已成功完成 
+        setTimeout(()=>{
+          report("Resolving ninjaDelayedPromise");
+          resolve("Hattori");
+        },500)
+      })
+    
+      assert(ninjaDelayedPromise!==null,"After creating ninjaDelayedPromise");
+
+     //Promise的then方法用于创建一个当承诺兑现后执行的回调函数，在本例子中当计时器超时会被执行。
+      ninjaDelayedPromise.then(ninja=>{
+        assert(ninja==="Hattori","ninjaDelayedPromise resolve handled with Hattori");
+      })
+
+      //创建一个新的promise对象并立刻调用resolve函数
+      const ninjaImmediatePromise=new Promise((resolve,reject)=>{
+           report("ninjaImmediatePromise executor. Immediate resolve.");
+           resolve("Yoshi");
+      });
+      //创建一个回调函数，当promise调用resolve方法后执行，但我们的promise已经调试用过resolve方法了
+      ninjaImmediatePromise.then(ninja=>{
+        assert(ninja==="Yoshi","ninjaImmediatePromise resolve handled with Yoshi");
+      })
+      report("At code end");
+    </script>
+  </body>
+</html>

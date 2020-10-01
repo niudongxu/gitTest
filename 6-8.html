@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>向生成器发送数据及从生成器接收数据</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //生成器可以像其他函数一样接收标准参数
+      function* NinjaGenerator(action){
+        //奇迹出现了。产生一个值的同时，生成器会返回一个中间计算结果。通过带有参数的调用迭代器的next方法，我们可以将数据传递回生成器
+        const imposter=yield("Hattori "+action);
+
+        //传递回的值将成为yield表达式的返回值，因此imposter的值是Hanzo
+        assert(imposter==="Hanzo","The generator has been infiltrated");
+        yield ("Yoshi ("+imposter+") "+action);
+      }
+
+      const ninjaGenerator=NinjaGenerator("skulk");
+      
+      const result1=ninjaGenerator.next();
+      assert(result1.value==="Hattori skulk","Hattori is skulking");
+
+
+      const result2=ninjaGenerator.next("Hanzo");
+      assert(result2.value==="Yoshi (Hanzo) skulk","we have an imposter!");
+
+
+      const result3=ninjaGenerator.next();
+      console.log(result3);
+
+
+    
+
+
+
+    </script>
+  </body>
+</html>

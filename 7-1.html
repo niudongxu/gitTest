@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>对象可以通过原型访问其他对象的属性</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //在JavaScript中，对象是属性名与属性值的集合
+      //对象属性可以是简单的值（如数值/字符串）、函数或其他对象。同时，JavaScript是动态语言，可以修改或删除对象的属性。
+      
+      //继承是代码复用的一种方式，继承有助于合理的组织程序代码，将一个对象的属性扩展到另一个对象上。
+      //在javaScript中，可通过原型实现继承
+
+      //原型的概念很简单。每个对象都含有原型的引用，当查找属性时，若对象本身不具有该属性，则会查找原型上是否有该属性。
+
+      //当访问对象上不存在的属性时，将查询为对象的原型。
+      //当没有更多的原型可查询时，将停止查询特定的属性
+
+      //每个对象都可以有一个原型，每个对象的原型也可以拥有一个原型，一次类推，形成一个原型链。查找特定属性将会被委托在整个原型链上，只有当没有更多的原型可以进行查找时，才会停止查找。
+
+
+
+
+      //创建3个带有属性的对象
+      const yoshi={skulk:true};
+      const hattori={sneak:true};
+      const kuma={creep:true};
+      
+      //Yoshi 对象只能访问自身属性skulk
+      assert("skulk" in yoshi,'Yoshi can skulk');
+      assert(!("sneak" in yoshi),"Yoshi cannot sneak");
+      assert(!("creep" in yoshi),"Yoshi cannot creep");
+
+      //Object setProto-typeOf 方法，将对象hattori 设置为yoshi对象的原型
+
+      Object.setPrototypeOf(yoshi,hattori);
+
+      //通过将hattori 对象设置为 yoshi对象的原型，现在yoshi可以访问hattori对象的属性。
+      assert("sneak" in yoshi,"Yoshi can now sneak");
+      //目前hattori对象还不具有属性creep
+      assert(!("creep" in hattori),"hattori cannot creep");
+      
+     
+      //将kuma对象设置为hattori对象的原型
+      Object.setPrototypeOf(hattori,kuma);
+      //现在hattori对象可以访问属性creep
+      assert("creep" in hattori,"hattori can now creep");
+      //通过将hattori对象设置为yoshi对象的原型，现在yoshi对象也可以访问属性creep
+      assert("creep" in yoshi,"Yoshi can also creep");
+
+    </script>
+  </body>
+</html>

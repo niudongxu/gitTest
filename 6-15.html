@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>创建getJSON promise</title>
+    <style>
+      #results li.pass {
+        color: green;
+      }
+      #results li.fail {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text) {
+        assert(true, text);
+      }
+
+      function getJSON(url) {
+        return new Promise((resolve, reject) => {
+          const request = new XMLHttpRequest();
+
+          request.open("GET", url);
+
+          request.onload = function () {
+            try {
+              if (this.status === 200) {
+                resolve(JSON.parse(this.response));
+              } else {
+                reject(this.status + " " + this.statusText);
+              }
+            } catch (e) {
+              reject(e.message);
+            }
+
+            request.onerror = function () {
+              reject(this.status + " " + this.statusText);
+            };
+            request.send();
+          };
+        });
+      }
+
+      getJSON("dada/ninjas.json")
+        .then((ninjas) => {
+          assert(ninjas !== null, "Ninjas obtained!");
+        })
+        .catch(e=> assert(false,"shouldn't be here:" + e));
+    </script>
+  </body>
+</html>

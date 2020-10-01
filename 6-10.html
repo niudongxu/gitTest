@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>创建一个简单的promise</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //通过内置的Promise构造函数可以创建一个promise对象，需要向构造函数中传入两个函数参数resolve,reject
+      const ninjaPromise=new Promise((resolve,reject)=>{
+        //通过调用传入的resolve函数，一个promise将被成功兑现（resolve）
+        //resolve("Hattori");
+        //通过调用reject则promise被拒绝
+        reject("An error resolving a promise!");
+      });
+
+
+      ninjaPromise.then(ninja=>{
+        //在一个promise对象上使用then方法后可以传入两个回调函数，promise成功兑现后回调用第一个回调函数。
+        assert(ninja==="Hattori","We were promised Hattori!");
+      },err=>{
+        //出现错误时则调用第二个回调函数
+        assert(false,"There shouldn't be an error");
+      })
+    
+
+
+
+    </script>
+  </body>
+</html>

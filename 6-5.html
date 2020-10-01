@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用生成器生成ID序列</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //定义生成器函数 IdGenerator
+      function* IdGenerator(){
+        //一个始终记录ID的变量，这个变量无法在生成器外部改变
+        let id=0;
+        //循环无限长度的ID序列
+        while(true){
+          yield ++id;
+        }
+      }
+
+
+      //这个迭代器 我们能够向生成器请求新的ID值
+      const idIterator =IdGenerator();
+
+      //请求3个新ID值
+      const ninja1={id:idIterator.next().value};
+      const ninja2={id:idIterator.next().value};
+      const ninja3={id:idIterator.next().value};
+      
+      //测试结果
+      assert(ninja1.id===1,'First ninja has id 1');
+      assert(ninja2.id===2,'First ninja has id 2');
+      assert(ninja3.id===3,'First ninja has id 3');
+
+
+
+    </script>
+  </body>
+</html>

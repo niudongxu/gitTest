@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>用生成器遍历Dom树</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+    <div id="subTree">
+      <form>
+        <input type="text"/>
+      </form>
+      <p>paragraph</p>
+      <span>Span</span>
+    </div>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      function* DomTraversal(element){
+        yield element;
+        element=element.firstElementChild;
+        while(element){
+          //使用yield* 将迭代控制转移到另一个DomTraversal生成器实例上
+          yield* DomTraversal(element);
+          element=element.nextElementSibling;
+        }
+      }
+
+      const subTree=document.getElementById("subTree");
+
+      //使用for of 对节点进行循环迭代
+      for(let element of DomTraversal(subTree)){
+        assert(element!==null,element.nodeName);
+      }
+
+
+
+    </script>
+  </body>
+</html>

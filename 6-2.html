@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>通过迭代器对象控制生成器</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //通过在关键字function 后面加*定义生成器函数
+      function* WeaponGenerator(){
+        //使用关键字yield生成独立的值
+        yield "katana";
+        yield "Wakizashi";
+      }
+
+      //调用生成器得到一个迭代器(iterator)，从而我们能够控制生成器的执行
+      const weaponsIterator = WeaponGenerator();
+
+      //调用迭代器的next方法，向生成器请求一个新值
+      const result1=weaponsIterator.next();
+      assert(typeof result1==='object' && result1.value==="katana" && !result1.done,"Katana received!");
+
+      const result2=weaponsIterator.next();
+      assert(typeof result2==='object' && result2.value==="Wakizashi" && !result2.done,"Wakizashi received!");
+
+      const result3=weaponsIterator.next();
+      assert(typeof result3==='object' && result3.value===undefined && result3.done,"there are no nore results!");
+      
+      
+      //使用新的循环类型for-of取出生成值的序列
+      for(let weapon of WeaponGenerator()){
+        
+        assert(weapon !== undefined,weapon);
+      }
+      
+    </script>
+  </body>
+</html>

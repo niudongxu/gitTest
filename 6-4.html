@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>使用yield操作符将执行权交给另一个生成器</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+
+      
+      //通过在关键字function 后面加*定义生成器函数
+      function* WarriorGenerator(){
+        yield "Sun Tzu";
+      //yield 将执行权交给了另一个生成器
+        yield* NinjaGenerator();
+        yield "Genghis Khan";
+      }
+
+      function* NinjaGenerator(){
+        yield "Hattori";
+        yield "Yoshi";
+      }
+
+
+      for(let warrior of WarriorGenerator()){
+        assert(warrior !==null,warrior);
+      }
+      
+    </script>
+  </body>
+</html>

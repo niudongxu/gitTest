@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>通过原型方法创建新的实例</title>
+    <style>
+        #results li.pass{color:green;}
+        #results li.fail{color: red;}
+    </style>
+  </head>
+  <body>
+      <ul id="results"></ul>
+    <script>
+      //测试用断言函数
+      function assert(value, desc) {
+        var li = document.createElement("li");
+        li.className = value ? "pass" : "fail";
+        li.appendChild(document.createTextNode(desc));
+        document.getElementById("results").appendChild(li);
+      }
+
+      //将断言消息显示到屏幕
+      function report(text){
+         assert(true,text);
+      }
+
+      //定义一个空函数，什么也不做，也没有返回值
+      function Ninja(){}
+      //每个函数都具有内置的原型对象，我们可以对其自由更改
+        Ninja.prototype.swingSword=function(){
+          return true;
+        }
+      const ninja1=Ninja();
+      assert(ninja1===undefined,"No instance of Ninja created.");
+
+      //作为构造函数调用Ninja，验证不仅创建了新的实例，并且该实例具有原型上的放大
+      const ninja2 = new Ninja();
+      assert(ninja2 && ninja2.swingSword && ninja2.swingSword(),'Instance exists and method is callable.');
+
+
+
+    </script>
+  </body>
+</html>
